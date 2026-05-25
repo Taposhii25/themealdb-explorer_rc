@@ -45,5 +45,5 @@ A full-stack web application that explores recipes from TheMealDB API. Built wit
 
 1. **Clone the repository**
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/Taposhii25/themealdb-explorer_rc.git
 cd themealdb-explorer
