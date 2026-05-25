@@ -1,0 +1,15 @@
+{
+  "name": "themealdb-explorer",
+  "version": "1.0.0",
+  "description": "TheMealDB Explorer with Backend and Frontend",
+  "main": "backend/server.js",
+  "scripts": {
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm start",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "setup": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.1"
+  }
+}
