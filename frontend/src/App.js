@@ -12,31 +12,6 @@ function App() {
   const [selectedMeal, setSelectedMeal] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Indian food and favorite items search terms
-  const indianFoodItems = [
-    { name: "🍛 Biryani", search: "biryani" },
-    { name: "🍗 Butter Chicken", search: "butter chicken" },
-    { name: "🧀 Paneer", search: "paneer" },
-    { name: "🫓 Naan", search: "naan" },
-    { name: "🍲 Dal Makhani", search: "dal" },
-    { name: "🌶️ Tandoori", search: "tandoori" },
-    { name: "🥘 Curry", search: "curry" },
-    { name: "🍚 Rice", search: "rice" },
-    { name: "🥔 Samosa", search: "samosa" },
-    { name: "🍨 Kulfi", search: "kulfi" }
-  ];
-
-  const quickItems = [
-    { name: "🍕 Domino's Pizza", search: "pizza" },
-    { name: "🍗 KFC Chicken", search: "chicken" },
-    { name: "☕ Coffee", search: "coffee" },
-    { name: "🍰 Desserts", search: "cake" },
-    { name: "🍦 Ice Cream", search: "ice cream" },
-    { name: "🍪 Cookies", search: "cookies" },
-    { name: "🍩 Donuts", search: "donuts" },
-    { name: "🍫 Chocolate", search: "chocolate" }
-  ];
-
   // Fetch categories on component mount
   useEffect(() => {
     fetchCategories();
@@ -45,14 +20,7 @@ function App() {
   const fetchCategories = async () => {
     try {
       const response = await axios.get('/api/categories');
-      // Filter out beef, pork, and lamb categories
-      const filteredCategories = response.data.filter(cat => 
-        !cat.strCategory.toLowerCase().includes('beef') && 
-        !cat.strCategory.toLowerCase().includes('pork') &&
-        !cat.strCategory.toLowerCase().includes('lamb') &&
-        !cat.strCategory.toLowerCase().includes('goat')
-      );
-      setCategories(filteredCategories);
+      setCategories(response.data);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -66,20 +34,6 @@ function App() {
     try {
       const response = await axios.get(`/api/search?q=${searchQuery}`);
       setSearchResults(response.data.results || []);
-    } catch (error) {
-      console.error('Search error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleQuickSearch = async (query) => {
-    setSearchQuery(query);
-    setLoading(true);
-    try {
-      const response = await axios.get(`/api/search?q=${query}`);
-      setSearchResults(response.data.results || []);
-      setActiveTab('search');
     } catch (error) {
       console.error('Search error:', error);
     } finally {
@@ -132,7 +86,7 @@ function App() {
     <div className="app">
       <header className="header">
         <h1>🍽️ TheMealDB Explorer</h1>
-        <p>Discover delicious Indian cuisine, pizzas, coffee, and desserts!</p>
+        <p>Discover delicious recipes from around the world</p>
       </header>
 
       <div className="tabs">
@@ -156,27 +110,6 @@ function App() {
         </button>
       </div>
 
-      {}
-      <div className="quick-access">
-        <h3>🔥 Popular Indian Dishes</h3>
-        <div className="quick-buttons">
-          {indianFoodItems.map((item, index) => (
-            <button key={index} onClick={() => handleQuickSearch(item.search)} className="quick-btn indian">
-              {item.name}
-            </button>
-          ))}
-        </div>
-        
-        <h3>🍕 Fast Food & More</h3>
-        <div className="quick-buttons">
-          {quickItems.map((item, index) => (
-            <button key={index} onClick={() => handleQuickSearch(item.search)} className="quick-btn fastfood">
-              {item.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
       <div className="content">
         {/* Search Tab */}
         {activeTab === 'search' && (
@@ -184,7 +117,7 @@ function App() {
             <form onSubmit={handleSearch} className="search-form">
               <input
                 type="text"
-                placeholder="Search for biryani, pizza, coffee, cake, curry..."
+                placeholder="Search for a meal... (e.g., chicken, pasta, cake)"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="search-input"
@@ -202,7 +135,7 @@ function App() {
               ))}
             </div>
             {searchResults.length === 0 && !loading && (
-              <p className="empty-state">🔍 Search for delicious Indian food, pizza, coffee, or desserts!</p>
+              <p className="empty-state">🔍 Start searching for delicious recipes!</p>
             )}
           </div>
         )}
